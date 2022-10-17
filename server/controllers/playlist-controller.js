@@ -88,9 +88,14 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+updatePlaylistById = async (req, res) => {
+    await Playlist.findOneAndReplace({ _id: req.params.id }, { name: req.body.name, songs: req.body.songs }).catch(err => console.log(err))
+}
+
 module.exports = {
     createPlaylist,
     getPlaylists,
     getPlaylistPairs,
-    getPlaylistById
+    getPlaylistById,
+    updatePlaylistById
 }
