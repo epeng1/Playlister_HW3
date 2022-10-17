@@ -31,14 +31,14 @@ const ListSelector = () => {
     return (
         <div id="playlist-selector">
             <div id="list-selector-list">
-            <div id="playlist-selector-heading">
+            <div id="playlist-selector-heading" style={{display:'flex',alignItems:'center'}}>
                 <input
                     type="button"
                     id="add-list-button"
                     onClick={handleCreateNewList}
                     className="playlister-button"
                     value="+" />
-                Your Lists
+                <span style={{fontSize:18 + 'pt'}}> Your Lists </span>
             </div>                {
                     listCard
                 }

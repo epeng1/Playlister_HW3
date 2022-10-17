@@ -35,6 +35,7 @@ function EditToolbar() {
                 disabled={editStatus}
                 value="+"
                 className={enabledButtonClass}
+                style={{height:66 + 'px'}}
             />
             <input
                 type="button"
