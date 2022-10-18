@@ -111,6 +111,31 @@ export const useGlobalStore = () => {
                 return store;
         }
     }
+    // SETUP CTRL-Z AND CTRL-Y
+    let ctrlPressed = false;
+
+    let handleAppKeyDown = (keyEvent) => {
+        let CTRL_KEY_CODE = 17;
+        if (keyEvent.which === CTRL_KEY_CODE) {
+            ctrlPressed = true;
+        }
+        else if (keyEvent.key.toLowerCase() === "z") {
+            if (ctrlPressed) {
+                store.undo();
+            }
+        }
+        else if (keyEvent.key.toLowerCase() === "y") {
+            if (ctrlPressed) {
+                store.redo();
+            }
+        }
+    }
+    let handleAppKeyUp = (keyEvent) => {
+        if (keyEvent.which === 17)
+            ctrlPressed = false;
+    }
+    document.onkeydown = handleAppKeyDown;
+    document.onkeyup = handleAppKeyUp;
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
