@@ -154,6 +154,7 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
+        tps.clearAllTransactions();
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -261,6 +262,19 @@ export const useGlobalStore = () => {
 
     store.addMoveSongTransaction = function (start, end) {
         let transaction = new MoveSong_Transaction(this, start, end);
+        tps.addTransaction(transaction);
+    }
+
+    store.removeSong = async function (index) {
+        let list = store.currentList;
+        list.songs.splice(index, 1);
+        let id = list._id;
+        await api.updatePlaylistById(id, list);
+        store.setCurrentList(id);
+    }
+
+    store.addRemoveSongTransaction = function (index) {
+        let transaction = new RemoveSong_Transaction(this, index);
         tps.addTransaction(transaction);
     }
 

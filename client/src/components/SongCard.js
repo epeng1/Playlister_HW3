@@ -33,6 +33,11 @@ function SongCard(props) {
         // ASK THE MODEL TO MOVE THE DATA
         store.addMoveSongTransaction(sourceId, targetId);
     }
+    let handleShowRemoveSongModal = (event) => {
+        // @todo: hook up remove song modal
+        event.stopPropagation();
+        store.addRemoveSongTransaction(index);
+    }
 
     const { song, index } = props;
     let cardClass = "list-card unselected-list-card";
@@ -60,6 +65,7 @@ function SongCard(props) {
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
+                onClick={handleShowRemoveSongModal}
                 value={"\u2715"}
             />
         </div>
