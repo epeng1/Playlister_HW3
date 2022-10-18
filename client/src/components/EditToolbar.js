@@ -23,6 +23,9 @@ function EditToolbar() {
         history.push("/");
         store.closeCurrentList();
     }
+    function handleAdd() {
+        store.addCreateSongTransaction(store.getPlaylistSize(), "Untitled", "?", "dQw4w9WgXcQ")
+    }
     let editStatus = false;
     if (store.isListNameEditActive) {
         editStatus = true;
@@ -35,6 +38,7 @@ function EditToolbar() {
                 disabled={editStatus}
                 value="+"
                 className={enabledButtonClass}
+                onClick={handleAdd}
                 style={{height:66 + 'px'}}
             />
             <input

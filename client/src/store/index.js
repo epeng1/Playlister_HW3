@@ -273,8 +273,26 @@ export const useGlobalStore = () => {
         store.setCurrentList(id);
     }
 
-    store.addRemoveSongTransaction = function (index) {
-        let transaction = new RemoveSong_Transaction(this, index);
+    store.addRemoveSongTransaction = function (index, song) {
+        let transaction = new RemoveSong_Transaction(this, index, song);
+        tps.addTransaction(transaction);
+    }
+
+    store.createSong = async function (index, song) {
+        let list = store.currentList;
+        list.songs.splice(index, 0, song);
+        let id = list._id;
+        await api.updatePlaylistById(id, list);
+        store.setCurrentList(id);
+    }
+
+    store.addCreateSongTransaction = function (index, title, artist, id) {
+        let song = {
+            title: title,
+            artist: artist,
+            youTubeId: id
+        };
+        let transaction = new CreateSong_Transaction(this, index, song);
         tps.addTransaction(transaction);
     }
 

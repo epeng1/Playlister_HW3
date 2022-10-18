@@ -36,7 +36,7 @@ function SongCard(props) {
     let handleShowRemoveSongModal = (event) => {
         // @todo: hook up remove song modal
         event.stopPropagation();
-        store.addRemoveSongTransaction(index);
+        store.addRemoveSongTransaction(index, song);
     }
 
     const { song, index } = props;
