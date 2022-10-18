@@ -11,7 +11,12 @@ function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
     const history = useHistory();
 
-    let enabledButtonClass = "playlister-button";
+    let undoClass = "playlister-button";
+    let redoClass = "playlister-button";
+    let hasListClass = "playlister-button";
+    if (!store.canUndo()) undoClass += " disabled";
+    if (!store.canRedo()) redoClass += " disabled";
+    if (!store.hasCurrentList()) hasListClass += " disabled"
 
     function handleUndo() {
         store.undo();
@@ -35,34 +40,34 @@ function EditToolbar() {
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus}
+                disabled={editStatus || !store.hasCurrentList()}
                 value="+"
-                className={enabledButtonClass}
+                className={hasListClass}
                 onClick={handleAdd}
                 style={{height:66 + 'px'}}
             />
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus}
+                disabled={editStatus || !store.canUndo()}
                 value="⟲"
-                className={enabledButtonClass}
+                className={undoClass}
                 onClick={handleUndo}
             />
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus}
+                disabled={editStatus || !store.canRedo()}
                 value="⟳"
-                className={enabledButtonClass}
+                className={redoClass}
                 onClick={handleRedo}
             />
             <input
                 type="button"
                 id='close-button'
-                disabled={editStatus}
+                disabled={editStatus || !store.hasCurrentList()}
                 value="&#x2715;"
-                className={enabledButtonClass}
+                className={hasListClass}
                 onClick={handleClose}
             />
         </span>);

@@ -226,6 +226,15 @@ export const useGlobalStore = () => {
     store.redo = function () {
         tps.doTransaction();
     }
+    store.canUndo = function() {
+        return tps.hasTransactionToUndo();
+    }
+    store.canRedo = function() {
+        return tps.hasTransactionToRedo();
+    }
+    store.hasCurrentList = function() {
+        return (store.currentList !== null);
+    }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setListNameEditActive = function () {
