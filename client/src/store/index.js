@@ -22,11 +22,19 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
-    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION"
+    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
+    SET_MODAL: "SET_MODAL"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 const tps = new jsTPS();
+
+const CurrentModal = {
+    NONE : "NONE",
+    DELETE_LIST : "DELETE_LIST",
+    EDIT_SONG : "EDIT_SONG",
+    REMOVE_SONG : "REMOVE_SONG"
+}
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
@@ -36,7 +44,10 @@ export const useGlobalStore = () => {
         idNamePairs: [],
         currentList: null,
         newListCounter: 0,
-        listNameActive: false
+        listNameActive: false,
+        currentModal: CurrentModal.NONE,
+        currentSongIndex: -1,
+        markedList: null
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -50,7 +61,9 @@ export const useGlobalStore = () => {
                     idNamePairs: payload.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -59,7 +72,9 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 })
             }
             // CREATE A NEW LIST
@@ -68,7 +83,9 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     newListCounter: store.newListCounter + 1,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -77,7 +94,9 @@ export const useGlobalStore = () => {
                     idNamePairs: payload,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -86,7 +105,9 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1,
                 });
             }
             // UPDATE A LIST
@@ -95,7 +116,9 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 });
             }
             // START EDITING A LIST NAME
@@ -104,8 +127,18 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     newListCounter: store.newListCounter,
-                    listNameActive: true
+                    listNameActive: true,
+                    currentModal: CurrentModal.NONE,
+                    currentSongIndex: -1
                 });
+            }
+            case GlobalStoreActionType.SET_MODAL: {
+                return setStore((prevStore) => ({
+                    ...prevStore,
+                    currentModal: payload.modal,
+                    currentSongIndex: payload.index,
+                    markedList: payload.list
+                }));
             }
             default:
                 return store;
@@ -180,6 +213,19 @@ export const useGlobalStore = () => {
             payload: {}
         });
         tps.clearAllTransactions();
+    }
+
+    store.setModal = function (modal, index, list) {
+        storeReducer({
+            type: GlobalStoreActionType.SET_MODAL,
+            payload: {
+                modal: modal,
+                index: index,
+                list: list
+            }
+        })
+        // store.currentModal = modal;
+        // store.currentSongIndex = index;
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS

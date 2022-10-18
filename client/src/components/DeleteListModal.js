@@ -4,14 +4,26 @@ import { GlobalStoreContext } from '../store'
 function DeleteListModal(props) {
     const { store } = useContext(GlobalStoreContext);
 
-    function handleConfirmDeleteList() {
-
+    async function handleConfirmDeleteList() {
+        if (store.markedList) {
+            await store.deleteList(store.markedList._id);
+        }
+        store.loadIdNamePairs();
+        store.setModal("NONE", -1);
     }
 
     function handleCancelDeleteList() {
-
+        store.setModal("NONE", -1);
     }
     
+    let name = "";
+    if (store.markedList) {
+        name = store.markedList.name;
+    }
+    let modalClass = "modal";
+    if (store.currentModal === "DELETE_LIST") {
+        modalClass += " is-visible"
+    }
     return (
         <div
             id="delete-list-modal"
