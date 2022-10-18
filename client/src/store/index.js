@@ -296,6 +296,19 @@ export const useGlobalStore = () => {
         tps.addTransaction(transaction);
     }
 
+    store.updateSong = async function (index, song) {
+        let list = store.currentList;
+        list.songs.splice(index, 1, song);
+        let id = list._id;
+        await api.updatePlaylistById(id, list);
+        store.setCurrentList(id);
+    }
+
+    store.addUpdateSongTransaction = function (index, oldSong, newSong) {
+        let transaction = new UpdateSong_Transaction(this, index, oldSong, newSong);
+        tps.addTransaction(transaction);
+    }
+
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
 }

@@ -1,8 +1,19 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const [editActive, setEditActive] = useState(false);
+    const [state, setState] = useState({
+        title: "",
+        artist: "",
+        youTubeId: ""
+    })
+    const [oldSong, setOldSong] = useState({
+        title: "",
+        artist: "",
+        youTubeId: ""
+    })
     
     let handleDragStart = (event) => {
         event.dataTransfer.setData("song", event.target.id);
@@ -38,10 +49,42 @@ function SongCard(props) {
         event.stopPropagation();
         store.addRemoveSongTransaction(index, song);
     }
+    let handleClick = (event) => {
+        if (event.detail === 2) {
+            setOldSong({
+                title: song.title,
+                artist: song.artist,
+                youTubeId: song.youTubeId
+            })
+            setState({
+                title: song.title,
+                artist: song.artist,
+                youTubeId: song.youTubeId
+            })
+            toggleEdit(event);
+        }
+    }
+    let toggleEdit = (event) => {
+        event.stopPropagation();
+        setEditActive(!editActive);
+    }
+    let handleChange = (event) => {
+        const value = event.target.value;
+        setState({
+            ...state,
+            [event.target.name]: value
+        });
+    }
+    let handleKeyPress = (event) => {
+        if (event.code === "Enter") {
+            store.addUpdateSongTransaction(index, oldSong, state)
+            toggleEdit(event);
+        }
+    }
 
     const { song, index } = props;
     let cardClass = "list-card unselected-list-card";
-    return (
+    let cardElement =
         <div
             key={index}
             id={'song-' + index + '-card'}
@@ -52,7 +95,7 @@ function SongCard(props) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             draggable="true"
-            //onClick={handleClick}
+            onClick={handleClick}
         >
             {index + 1}.
             <a
@@ -68,8 +111,42 @@ function SongCard(props) {
                 onClick={handleShowRemoveSongModal}
                 value={"\u2715"}
             />
-        </div>
-    );
+        </div>;
+    
+    if (editActive) {
+        cardElement =
+            <div
+                id={'song-' + index + '-card'}
+                className='list-card'>
+                <span> Title: </span>
+                <input
+                    id={"song-" + index + "-title"}
+                    name="title"
+                    type='text'
+                    defaultValue={song.title}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}/>
+                <p></p>
+                <span> Artist: </span>
+                <input
+                    id={"song-" + index + "-artist"}
+                    name="artist"
+                    type='text'
+                    defaultValue={song.artist}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}/>
+                <p></p>
+                <span> YouTube ID: </span>
+                <input
+                    id={"song-" + index + "-youTubeId"}
+                    name="youTubeId"
+                    type='text'
+                    defaultValue={song.youTubeId}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}/>
+            </div>
+    }
+    return (cardElement);
 }
 
 export default SongCard;
