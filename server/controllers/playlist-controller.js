@@ -95,6 +95,7 @@ updatePlaylistById = async (req, res) => {
 
 deletePlaylist = async (req, res) => {
     await Playlist.deleteOne({ _id: req.params.id }).catch(err => console.log(err))
+    return res.status(200).json({ success: true })
 }
 
 module.exports = {

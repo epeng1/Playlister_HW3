@@ -40,6 +40,7 @@ function ListCard(props) {
     }
 
     async function handleShowDeleteListModal(event) {
+        // @todo: hook up delete list modal
         event.stopPropagation();
         await store.deleteList(idNamePair._id);
         store.loadIdNamePairs();

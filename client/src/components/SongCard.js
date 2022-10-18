@@ -1,8 +1,38 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    
+    let handleDragStart = (event) => {
+        event.dataTransfer.setData("song", event.target.id);
+    }
+    let handleDragOver = (event) => {
+        event.preventDefault();
+    }
+    let handleDragEnter = (event) => {
+        event.preventDefault();
+    }
+    let handleDragLeave = (event) => {
+        event.preventDefault();
+    }
+    let handleDrop = (event) => {
+        event.preventDefault();
+        let target = event.target;
+        let targetId = target.id;
+        if (!targetId.includes("song-")) {
+            return;
+        }
+        targetId = Number(targetId.charAt(target.id.indexOf("-") + 1));
+        let sourceId = event.dataTransfer.getData("song");
+        if (!sourceId.includes("song-")) {
+            return;
+        }
+        sourceId = Number(sourceId.charAt(sourceId.indexOf("-") + 1));
+
+        // ASK THE MODEL TO MOVE THE DATA
+        store.addMoveSongTransaction(sourceId, targetId);
+    }
 
     const { song, index } = props;
     let cardClass = "list-card unselected-list-card";
@@ -11,6 +41,13 @@ function SongCard(props) {
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            draggable="true"
+            //onClick={handleClick}
         >
             {index + 1}.
             <a
