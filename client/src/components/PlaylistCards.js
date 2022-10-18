@@ -14,6 +14,7 @@ function PlaylistCards() {
 
     return (
         <div id="playlist-cards">
+        <div id="buffer">
         {
             store.currentList.songs.map((song, index) => (
                 <SongCard
@@ -24,6 +25,7 @@ function PlaylistCards() {
                 />
             ))
         }
+        </div>
         </div>
     )
 }

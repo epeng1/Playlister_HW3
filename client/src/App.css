@@ -63,7 +63,8 @@ body {
 }
 
 #playlist-selector, #playlist-cards {
-  overflow: scroll;
+  overflow: auto;
+  height: 80%;
   grid-column: 1 / 3;
   grid-row: 2 / 3;
   display:grid;
@@ -90,7 +91,6 @@ body {
 }
 
 #playlister-statusbar {
-  position: absolute;
   left: 0%;
   top: 90%;
   width: 100%;
