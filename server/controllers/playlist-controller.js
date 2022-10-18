@@ -90,6 +90,7 @@ getPlaylistPairs = async (req, res) => {
 
 updatePlaylistById = async (req, res) => {
     await Playlist.findOneAndReplace({ _id: req.params.id }, { name: req.body.name, songs: req.body.songs }).catch(err => console.log(err))
+    return res.status(200).json({ success: true })
 }
 
 deletePlaylist = async (req, res) => {
