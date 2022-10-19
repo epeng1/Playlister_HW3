@@ -32,7 +32,6 @@ const tps = new jsTPS();
 const CurrentModal = {
     NONE : "NONE",
     DELETE_LIST : "DELETE_LIST",
-    EDIT_SONG : "EDIT_SONG",
     REMOVE_SONG : "REMOVE_SONG"
 }
 

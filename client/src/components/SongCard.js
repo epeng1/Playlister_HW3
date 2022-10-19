@@ -45,9 +45,9 @@ function SongCard(props) {
         store.addMoveSongTransaction(sourceId, targetId);
     }
     let handleShowRemoveSongModal = (event) => {
-        // @todo: hook up remove song modal
         event.stopPropagation();
-        store.addRemoveSongTransaction(index, song);
+        store.setModal("REMOVE_SONG", index, null)
+        //store.addRemoveSongTransaction(index, song);
     }
     let handleClick = (event) => {
         if (event.detail === 2) {
